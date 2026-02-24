@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MarketPro Super App</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" rel="stylesheet"/>
+</head>
+<body class="bg-gray-100">
+
+<header class="bg-blue-600 text-white p-4 sticky top-0 z-50">
+  <h1 class="text-lg font-bold text-center">MarketPro</h1>
+</header>
+
+<div class="swiper mySwiper mt-3">
+  <div class="swiper-wrapper">
+    <div class="swiper-slide bg-red-500 text-white p-6 rounded-xl mx-4">
+      <h2 class="text-lg font-bold">FLASH SALE 70%</h2>
+      <p>Diskon besar hari ini</p>
+    </div>
+    <div class="swiper-slide bg-green-500 text-white p-6 rounded-xl mx-4">
+      <h2 class="text-lg font-bold">Gratis Ongkir</h2>
+      <p>Min belanja 50rb</p>
+    </div>
+  </div>
+</div>
+
+<section class="grid grid-cols-4 gap-4 p-4 text-center text-sm">
+  <a href="kategori.html">👕<br>Fashion</a>
+  <a href="kategori.html">📱<br>Elektronik</a>
+  <a href="kategori.html">🐾<br>Hewan</a>
+  <a href="kategori.html">🏥<br>Kesehatan</a>
+  <a href="kategori.html">🏠<br>Rumah</a>
+  <a href="kategori.html">🎁<br>Hobi</a>
+  <a href="kategori.html">🚗<br>Otomotif</a>
+  <a href="kategori.html">📚<br>Buku</a>
+</section>
+
+<section class="p-4 pb-20">
+  <h2 class="font-bold mb-3">Produk Terlaris</h2>
+  <div class="grid grid-cols-2 gap-4">
+    <a href="produk.html" class="bg-white rounded-xl shadow p-2">
+      <img src="https://via.placeholder.com/300" class="rounded-lg">
+      <p class="text-sm font-semibold mt-2">Smartphone X</p>
+      <p class="text-blue-600 font-bold">Rp 3.500.000</p>
+    </a>
+    <a href="produk.html" class="bg-white rounded-xl shadow p-2">
+      <img src="https://via.placeholder.com/300" class="rounded-lg">
+      <p class="text-sm font-semibold mt-2">Makanan Anjing</p>
+      <p class="text-blue-600 font-bold">Rp 120.000</p>
+    </a>
+  </div>
+</section>
+
+<nav class="fixed bottom-0 left-0 right-0 bg-white shadow flex justify-around py-3 text-sm">
+  <a href="index.html">🏠<br>Home</a>
+  <a href="keranjang.html">🛒<br>Cart</a>
+  <a href="akun.html">👤<br>Akun</a>
+</nav>
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script>
+new Swiper(".mySwiper",{loop:true,autoplay:{delay:3000}});
+</script>
+
+</body>
+</html>
