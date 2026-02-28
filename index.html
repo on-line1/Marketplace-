@@ -3,65 +3,122 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MarketPro Super App</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" rel="stylesheet"/>
+<title>MarketPro PWA Standalone</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#16a34a">
+<style>
+body{margin:0;font-family:Arial;background:#0f172a;color:white;text-align:center}
+button{padding:10px 18px;margin:5px;border:none;border-radius:8px;background:#16a34a;color:white;cursor:pointer}
+.card{background:white;color:#0f172a;padding:15px;border-radius:10px;margin:10px auto;max-width:350px}
+h2{margin-top:40px}
+</style>
 </head>
-<body class="bg-gray-100">
+<body>
 
-<header class="bg-blue-600 text-white p-4 sticky top-0 z-50">
-  <h1 class="text-lg font-bold text-center">MarketPro</h1>
-</header>
+<h1>MarketPro PWA</h1>
+<p>Versi Tanpa Server - 100% Offline Ready</p>
 
-<div class="swiper mySwiper mt-3">
-  <div class="swiper-wrapper">
-    <div class="swiper-slide bg-red-500 text-white p-6 rounded-xl mx-4">
-      <h2 class="text-lg font-bold">FLASH SALE 70%</h2>
-      <p>Diskon besar hari ini</p>
-    </div>
-    <div class="swiper-slide bg-green-500 text-white p-6 rounded-xl mx-4">
-      <h2 class="text-lg font-bold">Gratis Ongkir</h2>
-      <p>Min belanja 50rb</p>
-    </div>
-  </div>
-</div>
+<h2>Produk</h2>
+<div id="productList"></div>
 
-<section class="grid grid-cols-4 gap-4 p-4 text-center text-sm">
-  <a href="kategori.html">👕<br>Fashion</a>
-  <a href="kategori.html">📱<br>Elektronik</a>
-  <a href="kategori.html">🐾<br>Hewan</a>
-  <a href="kategori.html">🏥<br>Kesehatan</a>
-  <a href="kategori.html">🏠<br>Rumah</a>
-  <a href="kategori.html">🎁<br>Hobi</a>
-  <a href="kategori.html">🚗<br>Otomotif</a>
-  <a href="kategori.html">📚<br>Buku</a>
-</section>
+<h2>Keranjang</h2>
+<div id="cartList"></div>
+<button onclick="checkout()">Checkout</button>
 
-<section class="p-4 pb-20">
-  <h2 class="font-bold mb-3">Produk Terlaris</h2>
-  <div class="grid grid-cols-2 gap-4">
-    <a href="produk.html" class="bg-white rounded-xl shadow p-2">
-      <img src="https://via.placeholder.com/300" class="rounded-lg">
-      <p class="text-sm font-semibold mt-2">Smartphone X</p>
-      <p class="text-blue-600 font-bold">Rp 3.500.000</p>
-    </a>
-    <a href="produk.html" class="bg-white rounded-xl shadow p-2">
-      <img src="https://via.placeholder.com/300" class="rounded-lg">
-      <p class="text-sm font-semibold mt-2">Makanan Anjing</p>
-      <p class="text-blue-600 font-bold">Rp 120.000</p>
-    </a>
-  </div>
-</section>
+<h2>Invoice</h2>
+<div id="invoiceList"></div>
 
-<nav class="fixed bottom-0 left-0 right-0 bg-white shadow flex justify-around py-3 text-sm">
-  <a href="index.html">🏠<br>Home</a>
-  <a href="keranjang.html">🛒<br>Cart</a>
-  <a href="akun.html">👤<br>Akun</a>
-</nav>
-
-<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>
-new Swiper(".mySwiper",{loop:true,autoplay:{delay:3000}});
+const products=[
+{id:1,name:"Produk A",price:10000},
+{id:2,name:"Produk B",price:20000},
+{id:3,name:"Produk C",price:30000}
+];
+
+let cart=JSON.parse(localStorage.getItem("cart"))||[];
+let invoices=JSON.parse(localStorage.getItem("invoices"))||[];
+
+function saveData(){
+localStorage.setItem("cart",JSON.stringify(cart));
+localStorage.setItem("invoices",JSON.stringify(invoices));
+}
+
+function renderProducts(){
+const c=document.getElementById("productList");
+c.innerHTML="";
+products.forEach(p=>{
+c.innerHTML+=`<div class="card">
+<b>${p.name}</b><br>Rp ${p.price}<br>
+<button onclick="addToCart(${p.id})">Tambah</button>
+</div>`;
+});
+}
+
+function addToCart(id){
+const item=products.find(p=>p.id===id);
+cart.push(item);
+saveData();
+renderCart();
+alert("Ditambahkan ke keranjang");
+}
+
+function renderCart(){
+const c=document.getElementById("cartList");
+c.innerHTML="";
+if(cart.length===0){c.innerHTML="<p>Kosong</p>";return;}
+cart.forEach(i=>{
+c.innerHTML+=`<div class="card">${i.name} - Rp ${i.price}</div>`;
+});
+}
+
+function checkout(){
+if(cart.length===0){alert("Keranjang kosong");return;}
+let total=cart.reduce((sum,i)=>sum+i.price,0);
+let invoice={
+id:Date.now(),
+number:"INV-"+Date.now(),
+total:total,
+status:"pending",
+date:new Date().toLocaleString()
+};
+invoices.push(invoice);
+cart=[];
+saveData();
+renderCart();
+renderInvoices();
+alert("Order dibuat & Invoice generated");
+}
+
+function renderInvoices(){
+const c=document.getElementById("invoiceList");
+c.innerHTML="";
+if(invoices.length===0){c.innerHTML="<p>Belum ada invoice</p>";return;}
+invoices.forEach(inv=>{
+c.innerHTML+=`<div class="card">
+Invoice: ${inv.number}<br>
+Tanggal: ${inv.date}<br>
+Total: Rp ${inv.total}<br>
+Status: ${inv.status}<br>
+<button onclick="payInvoice(${inv.id})">Konfirmasi Bayar</button>
+</div>`;
+});
+}
+
+function payInvoice(id){
+let inv=invoices.find(i=>i.id===id);
+inv.status="paid";
+saveData();
+renderInvoices();
+alert("Pembayaran dikonfirmasi");
+}
+
+renderProducts();
+renderCart();
+renderInvoices();
+
+if('serviceWorker' in navigator){
+navigator.serviceWorker.register('sw.js');
+}
 </script>
 
 </body>
